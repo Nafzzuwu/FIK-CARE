@@ -21,8 +21,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
     
-    // Tambahkan route admin lainnya di sini
-    // Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
 });
 
 // Route Profile (bisa diakses oleh user dan admin)
