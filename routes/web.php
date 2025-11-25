@@ -8,6 +8,8 @@ Route::get('/', function () {
     return view('landing');
 });
 
+
+
 // // Halaman Welcome (tanpa auth)
 // Route::get('/', function () {
 //     return view('welcome');
@@ -46,3 +48,28 @@ Route::get('/logout', function () {
 })->middleware('auth');
 
 require __DIR__.'/auth.php';
+
+// dashboarduser edit
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserReportController;
+
+// Halaman buat laporan
+Route::get('/report/create', [ReportController::class, 'create'])
+    ->name('report.create');
+
+// Halaman riwayat laporan user
+Route::get('/user/reports', [UserReportController::class, 'index'])
+    ->name('user.reports');
+
+// halaman laporan
+Route::get('/laporan', [ReportController::class, 'create'])->name('report.create');
+Route::post('/report/store', [ReportController::class, 'store'])->name('report.store');
+
+// profil
+Route::get('/profil', function () {
+    return view('editprofil');
+})->middleware('auth')->name('profil');
+
+// riwayat laporan
+Route::get('/riwayatlaporan', [ReportController::class, 'index'])
+    ->name('riwayatlaporan');
