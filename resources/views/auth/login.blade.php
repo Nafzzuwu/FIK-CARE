@@ -1,39 +1,65 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FIK Care</title>
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+    <link rel="stylesheet" href="{{ asset('/assets/css/login.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+<body>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    <div class="login-wrapper">
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+        <img src="/your-logo.png" alt="Logo">
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+        <h2>Masuk ke FIK Care</h2>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+        @if (session('status'))
+            <p style="color: #22c55e; font-size:14px; margin-bottom:10px;">
+                {{ session('status') }}
+            </p>
+        @endif
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email"
+                    name="email"
+                    id="email"
+                    value="{{ old('email') }}"
+                    required autofocus>
+                @error('email')
+                    <small style="color:#f87171">{{ $message }}</small>
+                @enderror
+            </div>
+
+            <div class="form-group" style="margin-top: 18px;">
+                <label for="password">Password</label>
+                <input type="password"
+                    name="password"
+                    id="password"
+                    required>
+                @error('password')
+                    <small style="color:#f87171">{{ $message }}</small>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn-login">
+                Log In
+            </button>
+
+            <div class="extra-links">
+                @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}">Lupa password?</a>
+                @endif
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
