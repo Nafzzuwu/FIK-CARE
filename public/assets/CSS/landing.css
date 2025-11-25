@@ -1,0 +1,192 @@
+/* GLOBAL */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    scroll-behavior: smooth;
+    background: #f8f9fa;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+/* NAVBAR – DIPERBESAR */
+.navbar {
+    background: rgba(112, 128, 144, 0.8);
+    backdrop-filter: blur(4px);
+    padding: 30px 0;              /* ⭐ Diperbesar */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo lebih besar */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    color: white;
+    font-size: 26px;              /* ⭐ lebih besar */
+    font-weight: 700;
+}
+
+.logo img {
+    height: 90px;                 /* ⭐ logo diperbesar */
+}
+
+/* Menu lebih besar & lebih renggang */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 45px;                    /* ⭐ lebih luas */
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;              /* ⭐ lebih besar */
+    font-weight: 500;
+}
+
+/* Tombol login & register diperbesar */
+.btn-login,
+.btn-register {
+    background: #003b4f;
+    padding: 15px 22px;           /* ⭐ lebih besar */
+    border-radius: 12px;
+    color: rgb(255, 255, 255) !important;
+    font-size: 18px;              /* ⭐ naik ukuran */
+    font-weight: 600;
+}
+
+/* HERO (FULL SCREEN) */
+.hero {
+    min-height: 90vh;
+    padding: 190px 5% 80px;       /* ⭐ naik karena navbar lebih tinggi */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #708090;
+    color: white;
+}
+
+.hero-left {
+    width: 55%;
+}
+
+.hero-left h1 {
+    margin: 0 0 10px 0;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 56px;
+}
+
+.hero-left p {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 12px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: #ffce8b;
+    color: black;
+}
+
+.btn-secondary {
+    background: white;
+    color: #003b4f;
+}
+
+.hero-right img {
+    width: 430px;
+}
+
+/* SECTION (FULL SCREEN) */
+.section {
+    min-height: 100vh;
+    padding: 130px 5% 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.section h2 {
+    font-size: 36px;
+    margin-bottom: 25px;
+}
+
+.section p,
+.section ol {
+    font-size: 20px;
+    line-height: 1.8;
+    width: 70%;
+    margin: auto;
+}
+
+/* FOOTER */
+.footer {
+    background: #708090;
+    padding: 20px 0;
+    color: white;
+    text-align: center;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+
+    .navbar {
+        padding: 20px 0;  /* agar tidak terlalu besar di HP */
+    }
+
+    .logo img {
+        height: 55px;
+    }
+
+    .logo {
+        font-size: 22px;
+    }
+
+    .nav-links {
+        gap: 15px;
+    }
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 160px;
+    }
+
+    .hero-right img {
+        width: 300px;
+        margin-top: 30px;
+    }
+
+    .section p,
+    .section ol {
+        width: 90%;
+        font-size: 18px;
+    }
+}

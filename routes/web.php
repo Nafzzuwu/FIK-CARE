@@ -3,10 +3,15 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Halaman Welcome (tanpa auth)
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing');
 });
+
+// // Halaman Welcome (tanpa auth)
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 // Route untuk USER (hanya role 'user' yang bisa akses)
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
