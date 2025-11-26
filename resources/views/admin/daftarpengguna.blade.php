@@ -21,17 +21,6 @@
         background: #6b7280;
         transition: .25s;
     }
-    .btn-role {
-        background: #2563eb;
-        border: none;
-        padding: 6px 15px;
-        border-radius: 8px;
-        color: white;
-        font-size: 13px;
-    }
-    .btn-role:hover {
-        background: #1d4ed8;
-    }
     .icon-delete {
         cursor: pointer;
         font-size: 22px;
@@ -39,6 +28,28 @@
     }
     .icon-delete:hover {
         color: #ef4444;
+    }
+    .badge-role-admin {
+        background: #2563eb;
+        padding: 6px 12px;
+        border-radius: 8px;
+        color: white;
+        font-size: 12px;
+    }
+    .badge-role-user {
+        background: #22c55e;
+        padding: 6px 12px;
+        border-radius: 8px;
+        color: white;
+        font-size: 12px;
+    }
+    .badge-me {
+        background: #facc15;
+        color: black;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 11px;
+        margin-left: 5px;
     }
 </style>
 
@@ -61,30 +72,44 @@
             @foreach($users as $u)
             <tr>
                 <td class="p-3">{{ $u->id }}</td>
-                <td class="p-3">{{ $u->name }}</td>
+                <td class="p-3">
+                    {{ $u->name }}
+
+                    {{-- Tandai diri sendiri --}}
+                    @if(auth()->id() == $u->id)
+                        <span class="badge-me">Saya</span>
+                    @endif
+                </td>
                 <td class="p-3">{{ $u->email }}</td>
 
+                {{-- ROLE --}}
                 <td class="p-3">
-                    <form action="{{ route('admin.daftarpengguna.role', $u->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <button class="btn-role">
-                            {{ $u->role }}
-                        </button>
-                    </form>
+                    @if($u->role === 'admin')
+                        <span class="badge-role-admin">Admin</span>
+                    @else
+                        <span class="badge-role-user">User</span>
+                    @endif
                 </td>
 
+                {{-- AKSI --}}
                 <td class="p-3 text-center">
-                    <span onclick="confirmDeleteUser({{ $u->id }})" class="icon-delete">
-                        🗑️
-                    </span>
 
-                    <form id="user-delete-{{ $u->id }}" 
-                        action="{{ route('admin.daftarpengguna.delete', $u->id) }}"
-                        method="POST">
-                        @csrf
-                        @method('DELETE')
-                    </form>
+                    {{-- Hanya boleh hapus USER lain (bukan admin & bukan diri sendiri) --}}
+                    @if($u->role === 'user' && auth()->id() !== $u->id)
+                        <span onclick="confirmDeleteUser({{ $u->id }})" class="icon-delete">🗑️</span>
+
+                        <form id="user-delete-{{ $u->id }}" 
+                            action="{{ route('admin.daftarpengguna.delete', $u->id) }}"
+                            method="POST">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+
+                    {{-- Selain itu --}}
+                    @else
+                        <span style="color:#9ca3af;">—</span>
+                    @endif
+
                 </td>
             </tr>
             @endforeach

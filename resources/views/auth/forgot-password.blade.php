@@ -1,25 +1,81 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lupa Password</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+<style>
+body{
+    font-family:Poppins;
+    background:#111827;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.card{
+    background:#1f2937;
+    padding:30px;
+    border-radius:15px;
+    width:400px;
+    color:white;
+    box-shadow:0 10px 25px rgba(0,0,0,.3);
+}
+input{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    background:#374151;
+    color:white;
+}
+button{
+    margin-top:20px;
+    width:100%;
+    background:#1e3a8a;
+    border:none;
+    padding:12px;
+    border-radius:10px;
+    color:#f0f9ff;
+    font-weight:600;
+    transition:.25s;
+    cursor:pointer;
+}
+button:hover{
+    background:#2563eb;
+}
+a{
+    color:#93c5fd;
+    text-decoration:none;
+    display:block;
+    margin-top:10px;
+    text-align:center;
+}
+</style>
+</head>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<body>
 
-    <form method="POST" action="{{ route('password.email') }}">
-        @csrf
+<div class="card">
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+<h3 style="text-align:center;">RESET PASSWORD</h3>
+<p style="font-size:14px;text-align:center">
+Masukkan email untuk menerima link reset password.
+</p>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+@if(session('status'))
+<p style="color:#22c55e;text-align:center">{{ session('status') }}</p>
+@endif
+
+<form method="POST" action="{{ route('password.email') }}">
+@csrf
+
+<input type="email" name="email" placeholder="Email" required>
+
+<button>KIRIM LINK RESET</button>
+
+<a href="{{ route('login') }}">Kembali ke Login</a>
+</form>
+
+</div>
+</body>
+</html>

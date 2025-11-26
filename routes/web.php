@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -40,7 +40,7 @@ Route::get('/logout', function () {
 require __DIR__.'/auth.php';
 
 // dashboarduser edit
-use App\Http\Controllers\UserReportController;
+use App\Http\Controllers\User\UserReportController;
 
 // Halaman buat laporan
 Route::middleware(['auth'])->group(function () {
@@ -66,11 +66,14 @@ Route::get('/report', [UserReportController::class, 'index'])->name('report.inde
 // ADMIN MIDDLEWARE
 use App\Http\Controllers\Admin\AdminReportController;
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
     Route::get('/', [AdminReportController::class, 'index'])->name('dashboard');
 
-       // Daftar Laporan
+    // Daftar Laporan
     Route::get('/daftarlaporan', [AdminReportController::class, 'laporan'])->name('daftarlaporan');
     Route::put('/daftarlaporan/{id}/status', [AdminReportController::class, 'updateStatus'])->name('daftarlaporan.status');
     Route::delete('/daftarlaporan/{id}', [AdminReportController::class, 'delete'])->name('daftarlaporan.delete');
@@ -79,4 +82,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/daftarpengguna', [AdminReportController::class, 'pengguna'])->name('daftarpengguna');
     Route::put('/daftarpengguna/{id}/role', [AdminReportController::class, 'updateRole'])->name('daftarpengguna.role');
     Route::delete('/daftarpengguna/{id}', [AdminReportController::class, 'deleteUser'])->name('daftarpengguna.delete');
+
 });
+
