@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard - Fasilkom</title>
+    <title>Admin Dashboard - FIK CARE</title>
 
-    <!-- Bootstrap 5 -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Icons -->
@@ -19,76 +19,63 @@
         }
 
         .navbar-custom {
-            background-color: #475569;
+            background-color: #1f2937;
         }
 
         .card-custom {
-            background-color: #4B5563;
-            border: none;
-            transition: 0.3s;
-            color: white;
+            background-color: #374151;
             border-radius: 14px;
+            padding: 22px;
+            color: white;
+            transition: .3s;
         }
 
         .card-custom:hover {
-            background-color: #556070;
-            transform: translateY(-4px);
+            background-color: #4b5563;
+            transform: translateY(-5px);
         }
 
-        .section-header {
-            background-color: #334155;
-            border-radius: 12px;
-            padding: 22px;
-        }
-
-        /* BACK BUTTON */
         .btn-back {
-        background: #E5E7EB;
-        color: #1F2937;
-        border-radius: 10px;
-        padding: 8px 16px;
+            background: #E5E7EB;
+            color: #1F2937;
+            border-radius: 10px;
+            padding: 8px 16px;
         }
         .btn-back:hover {
-        background: #ffffff;
-        color: #111827;
+            background: #fff;
         }
     </style>
+
+    @stack('styles')
 </head>
 
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-sm py-3" style="background:#3d4954">
-    <div class="container d-flex align-items-center">
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-sm py-3">
+    <div class="container">
 
-        <!-- Logo + Title -->
-        <a class="navbar-brand fw-bold" href="/dashboard">
+        <a class="navbar-brand fw-bold" href="{{ route('admin.dashboard') }}">
             <img src="{{ asset('assets/img/logo.png') }}" height="40" class="me-2">
-            FIK - CARE
+            FIK - CARE | Admin
         </a>
 
-        <!-- User Dropdown -->
         <div class="dropdown ms-auto">
             <a class="text-white dropdown-toggle text-decoration-none fw-semibold d-flex align-items-center gap-2"
                data-bs-toggle="dropdown" href="#">
-
-                <i class="bi bi-person-circle fs-5"></i>
-
-                @if(auth()->check())
-                    {{ auth()->user()->name }}
-                @endif
+               <i class="bi bi-person-circle fs-5"></i>
+               {{ auth()->user()->name }}
             </a>
 
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+            <ul class="dropdown-menu dropdown-menu-end shadow">
                 <li>
-                    <a class="dropdown-item d-flex align-items-center gap-2" href="/profile">
+                    <a class="dropdown-item" href="/profile">
                         <i class="bi bi-gear"></i> Profil
                     </a>
                 </li>
                 <li>
                     <form method="GET" action="{{ route('logout') }}">
-                        @csrf
-                        <button class="dropdown-item text-danger d-flex align-items-center gap-2">
+                        <button class="dropdown-item text-danger">
                             <i class="bi bi-box-arrow-right"></i> Logout
                         </button>
                     </form>
@@ -99,20 +86,20 @@
     </div>
 </nav>
 
-<!-- BACK BUTTON (Hanya muncul jika bukan di dashboard) -->
-@if(auth()->check() && !request()->routeIs('dashboarduser'))
+@if(!request()->routeIs('admin.dashboard'))
 <div class="container mt-3">
-    <a href="{{ url()->previous() }}" class="btn btn-back shadow-sm d-inline-flex align-items-center">
+    <a href="{{ url()->previous() }}" class="btn btn-back shadow-sm">
         <i class="bi bi-arrow-left me-2"></i> Kembali
     </a>
 </div>
 @endif
 
-<!-- CONTENT -->
 <main class="container py-4">
     @yield('content')
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+@stack('scripts')
+
 </body>
 </html>

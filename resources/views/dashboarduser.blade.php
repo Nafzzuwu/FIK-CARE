@@ -92,7 +92,7 @@
         </div>
 
         <div class="col-md-4">
-            <a href="{{ route('riwayatlaporan') }}" class="text-decoration-none">
+            <a href="{{ route('report.index') }}" class="text-decoration-none">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="bi bi-file-earmark-text"></i></div>
                     <div class="feature-title">Riwayat Laporan</div>

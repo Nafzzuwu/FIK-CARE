@@ -9,12 +9,6 @@ Route::get('/', function () {
 });
 
 
-
-// // Halaman Welcome (tanpa auth)
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 // Route untuk USER (hanya role 'user' yang bisa akses)
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('/dashboard', function () {
@@ -28,15 +22,11 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
     
-    // Tambahkan route admin lainnya di sini
-    // Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
 });
 
 // Route Profile (bisa diakses oleh user dan admin)
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.editprofil');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.iniprofil');
 });
 
 // Route logout dengan GET (opsional, kurang aman)
@@ -50,20 +40,18 @@ Route::get('/logout', function () {
 require __DIR__.'/auth.php';
 
 // dashboarduser edit
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserReportController;
 
 // Halaman buat laporan
-Route::get('/report/create', [ReportController::class, 'create'])
-    ->name('report.create');
+Route::middleware(['auth'])->group(function () {
 
-// Halaman riwayat laporan user
-Route::get('/user/reports', [UserReportController::class, 'index'])
-    ->name('user.reports');
+    Route::get('/report/create', [UserReportController::class, 'create'])
+        ->name('report.create');
 
-// halaman laporan
-Route::get('/laporan', [ReportController::class, 'create'])->name('report.create');
-Route::post('/report/store', [ReportController::class, 'store'])->name('report.store');
+    Route::post('/report/store', [UserReportController::class, 'store'])
+        ->name('report.store');
+
+});
 
 // profil
 Route::get('/profil', function () {
@@ -71,5 +59,24 @@ Route::get('/profil', function () {
 })->middleware('auth')->name('profil');
 
 // riwayat laporan
-Route::get('/riwayatlaporan', [ReportController::class, 'index'])
-    ->name('riwayatlaporan');
+Route::get('/report', [UserReportController::class, 'index'])->name('report.index');
+
+
+
+// ADMIN MIDDLEWARE
+use App\Http\Controllers\Admin\AdminReportController;
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+
+    Route::get('/', [AdminReportController::class, 'index'])->name('dashboard');
+
+       // Daftar Laporan
+    Route::get('/daftarlaporan', [AdminReportController::class, 'laporan'])->name('daftarlaporan');
+    Route::put('/daftarlaporan/{id}/status', [AdminReportController::class, 'updateStatus'])->name('daftarlaporan.status');
+    Route::delete('/daftarlaporan/{id}', [AdminReportController::class, 'delete'])->name('daftarlaporan.delete');
+
+    // Daftar Pengguna
+    Route::get('/daftarpengguna', [AdminReportController::class, 'pengguna'])->name('daftarpengguna');
+    Route::put('/daftarpengguna/{id}/role', [AdminReportController::class, 'updateRole'])->name('daftarpengguna.role');
+    Route::delete('/daftarpengguna/{id}', [AdminReportController::class, 'deleteUser'])->name('daftarpengguna.delete');
+});

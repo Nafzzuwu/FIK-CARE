@@ -52,8 +52,10 @@
     <div class="profile-card">
 
         <div class="text-center mb-4">
-            <!-- Foto Profil -->
-            <img src="{{ asset('assets/user.png') }}" class="profile-img mb-3" alt="Profile">
+        <!-- Foto Profil dari online -->
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=4e73df&color=fff&size=150" 
+                class="profile-img mb-3" 
+                alt="Profile">
 
             <h3 class="fw-bold mb-0">{{ Auth::user()->name }}</h3>
             <p class="text-secondary">Pengguna Sistem Pelaporan</p>

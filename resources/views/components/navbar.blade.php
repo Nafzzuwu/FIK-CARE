@@ -3,7 +3,7 @@
 
         <div class="logo">
             <img src="/assets/img/logo.png" alt="Logo">
-            <span>Fasilkom</span>
+            <span>FIK - CARE</span>
         </div>
 
         <ul class="nav-links">
