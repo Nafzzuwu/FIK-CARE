@@ -61,3 +61,22 @@ Route::get('/profil', function () {
 // riwayat laporan
 Route::get('/report', [UserReportController::class, 'index'])->name('report.index');
 
+
+
+// ADMIN MIDDLEWARE
+use App\Http\Controllers\Admin\AdminReportController;
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+
+    Route::get('/', [AdminReportController::class, 'index'])->name('dashboard');
+
+       // Daftar Laporan
+    Route::get('/daftarlaporan', [AdminReportController::class, 'laporan'])->name('daftarlaporan');
+    Route::put('/daftarlaporan/{id}/status', [AdminReportController::class, 'updateStatus'])->name('daftarlaporan.status');
+    Route::delete('/daftarlaporan/{id}', [AdminReportController::class, 'delete'])->name('daftarlaporan.delete');
+
+    // Daftar Pengguna
+    Route::get('/daftarpengguna', [AdminReportController::class, 'pengguna'])->name('daftarpengguna');
+    Route::put('/daftarpengguna/{id}/role', [AdminReportController::class, 'updateRole'])->name('daftarpengguna.role');
+    Route::delete('/daftarpengguna/{id}', [AdminReportController::class, 'deleteUser'])->name('daftarpengguna.delete');
+});
