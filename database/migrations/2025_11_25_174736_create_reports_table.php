@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::create('reports', function (Blueprint $table) {
+
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('nama_pelapor');   // ← ini yang kamu butuhkan
+            $table->string('kategori');
+            $table->text('isi_laporan');
+            $table->date('tanggal');
+            $table->string('status')->default('Diproses'); // default otomatis diproses
+            $table->timestamps();
+
+
+            // Foreign key ke user
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('reports');
+    }
+};

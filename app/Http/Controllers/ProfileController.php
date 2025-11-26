@@ -16,11 +16,11 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.editprofil', [
+        return view('profile.iniprofil', [
             'user' => $request->user(),
         ]);
 
-        return view('admin.editprofil', [
+        return view('admin.iniprofil', [
             'admin' => $request->admin(),
         ]);
     }

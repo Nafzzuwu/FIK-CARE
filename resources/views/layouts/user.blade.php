@@ -64,7 +64,7 @@
         <!-- Logo + Title -->
         <a class="navbar-brand fw-bold" href="/dashboard">
             <img src="{{ asset('assets/img/logo.png') }}" height="40" class="me-2">
-            Fasilkom
+            FIK - CARE
         </a>
 
         <!-- User Dropdown -->
@@ -74,7 +74,9 @@
 
                 <i class="bi bi-person-circle fs-5"></i>
 
-                {{ Auth::user()->name }}
+                @if(auth()->check())
+                    {{ auth()->user()->name }}
+                @endif
             </a>
 
             <ul class="dropdown-menu dropdown-menu-end shadow-sm">
@@ -84,7 +86,7 @@
                     </a>
                 </li>
                 <li>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="GET" action="{{ route('logout') }}">
                         @csrf
                         <button class="dropdown-item text-danger d-flex align-items-center gap-2">
                             <i class="bi bi-box-arrow-right"></i> Logout
@@ -98,7 +100,7 @@
 </nav>
 
 <!-- BACK BUTTON (Hanya muncul jika bukan di dashboard) -->
-@if (!request()->routeIs('dashboarduser'))
+@if(auth()->check() && !request()->routeIs('dashboarduser'))
 <div class="container mt-3">
     <a href="{{ url()->previous() }}" class="btn btn-back shadow-sm d-inline-flex align-items-center">
         <i class="bi bi-arrow-left me-2"></i> Kembali

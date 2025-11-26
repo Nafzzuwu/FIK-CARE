@@ -4,7 +4,7 @@
 
 <div class="section-header mb-4">
     <h2 class="fw-bold mb-1">Buat Laporan Baru</h2>
-    <p class="mb-0">Sampaikan laporan Anda secara anonim kepada fakultas.</p>
+    <p class="mb-0">Sampaikan laporan Anda kepada fakultas.</p>
 </div>
 
 <div class="card card-custom p-4">
@@ -12,10 +12,10 @@
     <form action="{{ route('report.store') }}" method="POST">
         @csrf
 
-        <!-- Nama Pelapor (Anonim Otomatis) -->
+        <!-- Nama Pelapor -->
         <div class="mb-3">
             <label class="form-label fw-semibold">Nama Pelapor</label>
-            <input type="text" class="form-control" value="Anonim" readonly>
+            <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
         </div>
 
         <!-- Kategori -->
