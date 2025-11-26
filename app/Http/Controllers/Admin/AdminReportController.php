@@ -10,71 +10,69 @@ use Illuminate\Http\Request;
 class AdminReportController extends Controller
 {
     // ==============================
-    // DASHBOARD
+    // DASHBOARD ADMIN
     // ==============================
     public function index()
     {
         return view('admin.dashboard', [
             'totalLaporan'   => Report::count(),
-            'totalPengguna'  => User::count(),
             'laporanPending' => Report::where('status', 'pending')->count(),
+            'laporanSelesai' => Report::where('status', 'selesai')->count(),
+            'laporanDitolak' => Report::where('status', 'ditolak')->count(),
+            'totalPengguna'  => User::count(),
         ]);
     }
-
 
     // ==============================
     // DAFTAR LAPORAN
     // ==============================
     public function laporan()
     {
-        $laporan = Report::with('user')->orderBy('created_at', 'desc')->get();
+        $laporan = Report::with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('admin.daftarlaporan', compact('laporan'));
     }
 
+    // ==============================
+    // UPDATE STATUS LAPORAN
+    // ==============================
     public function updateStatus(Request $request, $id)
     {
-        $report = Report::findOrFail($id);
+        $laporan = Report::findOrFail($id);
 
-        // toggle status
-        $report->status = $report->status === 'selesai' ? 'pending' : 'selesai';
-        $report->save();
+        $laporan->status = $request->status;
+        $laporan->save();
 
-        return back()->with('success', 'Status laporan diperbarui.');
+        return redirect()->route('admin.daftarlaporan')
+                        ->with('success', 'Status laporan berhasil diperbarui');
     }
 
+    // ==============================
+    // HAPUS LAPORAN
+    // ==============================
     public function delete($id)
     {
         Report::findOrFail($id)->delete();
         return back()->with('success', 'Laporan berhasil dihapus.');
     }
 
-
     // ==============================
-    // DAFTAR PENGGUNA
+    // DAFTAR PENGGUNA (VIEW ONLY)
     // ==============================
     public function pengguna()
     {
         $users = User::orderBy('id', 'desc')->get();
-
         return view('admin.daftarpengguna', compact('users'));
     }
 
-    public function updateRole($id)
-    {
-        $user = User::findOrFail($id);
-
-        // toggle role
-        $user->role = $user->role === 'admin' ? 'user' : 'admin';
-        $user->save();
-
-        return back()->with('success', 'Role pengguna diperbarui.');
-    }
-
+    // ==============================
+    // HAPUS PENGGUNA
+    // ==============================
     public function deleteUser($id)
     {
         User::findOrFail($id)->delete();
-
         return back()->with('success', 'Pengguna berhasil dihapus.');
     }
 }

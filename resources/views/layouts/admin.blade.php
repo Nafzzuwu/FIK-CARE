@@ -11,6 +11,9 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <style>
         body {
             background-color: #6B7280;
@@ -88,7 +91,7 @@
 
 @if(!request()->routeIs('admin.dashboard'))
 <div class="container mt-3">
-    <a href="{{ url()->previous() }}" class="btn btn-back shadow-sm">
+    <a href="{{ route('admin.dashboard') }}" class="btn btn-back shadow-sm">
         <i class="bi bi-arrow-left me-2"></i> Kembali
     </a>
 </div>
