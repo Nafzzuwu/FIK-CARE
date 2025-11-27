@@ -110,9 +110,75 @@
             font-size: 14px;
             margin-bottom: 12px;
         }
+
+        /* Popup Notification Styles */
+        .popup-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideDown 0.4s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .popup-notification.hide {
+            animation: slideUp 0.4s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-30px);
+            }
+        }
+
+        .popup-icon {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
+
+@if(session('success'))
+    <div class="popup-notification" id="successPopup">
+        <div class="popup-icon">✓</div>
+        <span>{{ session('success') }}</span>
+    </div>
+@endif
 
 <div class="login-wrapper">
 
@@ -150,6 +216,20 @@
     </form>
 
 </div>
+
+<script>
+    // Auto hide popup after 3 seconds
+    const popup = document.getElementById('successPopup');
+    if (popup) {
+        setTimeout(() => {
+            popup.classList.add('hide');
+            // Remove from DOM after animation completes
+            setTimeout(() => {
+                popup.remove();
+            }, 400);
+        }, 3000);
+    }
+</script>
 
 </body>
 </html>
