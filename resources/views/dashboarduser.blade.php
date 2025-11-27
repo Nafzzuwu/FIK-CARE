@@ -3,108 +3,153 @@
 @section('content')
 
 <style>
+    /* Override body jika perlu konsistensi penuh */
     body {
-        background: #627180 !important;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
     }
 
-    /* NAVBAR PROFILE */
-    .profile-menu {
-        background: #3c4753;
-        border-radius: 10px;
-        padding: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-    }
-    .profile-menu a {
-        color: white !important;
-        padding: 8px 12px;
-        border-radius: 8px;
-        display: block;
-        transition: 0.2s;
-    }
-    .profile-menu a:hover {
-        background: rgba(255,255,255,0.12);
-    }
-
-    /* HEADER */
+    /* HEADER DASHBOARD */
     .dashboard-header {
-        background: linear-gradient(135deg,#3d4954,#495663);
-        padding: 35px;
-        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 40px;
+        border-radius: 20px;
         color: white;
-        margin-bottom: 35px;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+        margin-bottom: 40px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+
+    .dashboard-header h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .dashboard-header p {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin: 0;
     }
 
     /* FEATURE CARD */
     .feature-card {
-        background: #495663;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 20px;
-        padding: 35px 25px;
+        padding: 40px 30px;
         text-align: center;
         color: white;
-        transition: 0.3s ease;
+        transition: all 0.3s ease;
         cursor: pointer;
-        box-shadow: inset 0 0 8px rgba(255,255,255,0.05),
-                    0 6px 14px rgba(0,0,0,0.25);
-        height: 230px; /* FIX sehingga simetris */
+        height: 280px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
+        text-decoration: none;
     }
 
     .feature-card:hover {
+        background: rgba(255, 255, 255, 0.12);
         transform: translateY(-8px);
-        box-shadow: 0 14px 20px rgba(0,0,0,0.35);
-        background: #556270;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        border-color: rgba(255, 255, 255, 0.2);
     }
 
     .feature-icon {
-        font-size: 52px;
-        margin-bottom: 15px;
+        width: 80px;
+        height: 80px;
+        background: rgba(96, 165, 250, 0.15);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: #60a5fa;
+        margin-bottom: 20px;
+    }
+
+    .feature-card:hover .feature-icon {
+        background: rgba(96, 165, 250, 0.25);
+        transform: scale(1.05);
     }
 
     .feature-title {
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 8px;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: white;
+    }
+
+    .feature-card p {
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .dashboard-header {
+            padding: 30px 20px;
+        }
+
+        .dashboard-header h2 {
+            font-size: 1.6rem;
+        }
+
+        .feature-card {
+            height: auto;
+            min-height: 250px;
+            margin-bottom: 20px;
+        }
     }
 </style>
 
 <div class="container py-5">
 
     <!-- HEADER -->
-    <div class="dashboard-header text-center">
-        <h2 class="fw-bold">Dashboard Pengguna</h2>
+    <div class="dashboard-header">
+        <h2>Dashboard Pengguna</h2>
         <p>Selamat datang di layanan aspirasi dan pengaduan Fakultas Ilmu Komputer.</p>
     </div>
 
     <!-- MENU -->
     <div class="row g-4">
 
-        <div class="col-md-4">
+        <div class="col-lg-4 col-md-6">
             <a href="{{ route('report.create') }}" class="text-decoration-none">
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="bi bi-pencil-square"></i></div>
+                    <div class="feature-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
                     <div class="feature-title">Buat Laporan</div>
                     <p>Ajukan laporan baru untuk disampaikan kepada fakultas.</p>
                 </div>
             </a>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-lg-4 col-md-6">
             <a href="{{ route('report.index') }}" class="text-decoration-none">
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="bi bi-file-earmark-text"></i></div>
+                    <div class="feature-icon">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
                     <div class="feature-title">Riwayat Laporan</div>
                     <p>Lihat daftar laporan yang sudah Anda kirim.</p>
                 </div>
             </a>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-lg-4 col-md-6">
             <a href="/profile" class="text-decoration-none">
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="bi bi-person-circle"></i></div>
+                    <div class="feature-icon">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
                     <div class="feature-title">Profil Saya</div>
                     <p>Kelola pengaturan akun Anda.</p>
                 </div>

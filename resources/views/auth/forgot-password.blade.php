@@ -27,6 +27,7 @@ input{
     border:none;
     background:#374151;
     color:white;
+    margin-top:10px;
 }
 button{
     margin-top:20px;
@@ -52,18 +53,21 @@ a{
 }
 </style>
 </head>
-
 <body>
 
 <div class="card">
 
 <h3 style="text-align:center;">RESET PASSWORD</h3>
 <p style="font-size:14px;text-align:center">
-Masukkan email untuk menerima link reset password.
+Masukkan email dan password baru untuk mereset akun anda.
 </p>
 
 @if(session('status'))
 <p style="color:#22c55e;text-align:center">{{ session('status') }}</p>
+@endif
+
+@if($errors->any())
+<p style="color:red;text-align:center">{{ $errors->first() }}</p>
 @endif
 
 <form method="POST" action="{{ route('password.email') }}">
@@ -71,7 +75,11 @@ Masukkan email untuk menerima link reset password.
 
 <input type="email" name="email" placeholder="Email" required>
 
-<button>KIRIM LINK RESET</button>
+<input type="password" name="new_password" placeholder="Password Baru" required>
+
+<input type="password" name="new_password_confirmation" placeholder="Ulangi Password Baru" required>
+
+<button>RESET PASSWORD</button>
 
 <a href="{{ route('login') }}">Kembali ke Login</a>
 </form>
