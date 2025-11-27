@@ -170,6 +170,11 @@ body {
     color: white;
 }
 
+.select-status option {
+    color: #000 !important;
+    background-color: #ffffff !important;
+}
+
 /* Delete Button */
 .btn-delete {
     background: rgba(239, 68, 68, 0.15);
