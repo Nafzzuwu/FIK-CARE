@@ -75,4 +75,18 @@ class AdminReportController extends Controller
         User::findOrFail($id)->delete();
         return back()->with('success', 'Pengguna berhasil dihapus.');
     }
+
+    public function saveFeedback(Request $request, $id)
+    {
+        $request->validate([
+            'feedback' => 'required|string'
+        ]);
+
+        $report = Report::findOrFail($id);
+        $report->feedback = $request->feedback;
+        $report->save();
+
+        return back()->with('success', 'Feedback berhasil disimpan');
+    }
+
 }

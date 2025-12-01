@@ -343,4 +343,39 @@ function confirmDeleteUser(id) {
 }
 </script>
 
+{{-- Notifikasi Success --}}
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: "{{ session('success') }}",
+        timer: 2500,
+        showConfirmButton: false
+    });
+</script>
+@endif
+
+{{-- Notifikasi Error --}}
+@if(session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: "{{ session('error') }}"
+    });
+</script>
+@endif
+
+{{-- Notifikasi Validation Errors --}}
+@if($errors->any())
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: "{{ $errors->first() }}"
+    });
+</script>
+@endif
+
 @endsection

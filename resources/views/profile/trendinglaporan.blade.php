@@ -13,6 +13,9 @@
         font-size: 2rem;
         margin-bottom: 30px;
         text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        gap: 12px;
     }
 
     /* Card Custom */
@@ -69,101 +72,74 @@
         border-radius: 12px;
     }
 
-    /* Date Text */
-    .date-text {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.85rem;
+    /* Vote Section */
+    .vote-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        padding: 16px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        margin-top: 16px;
+    }
+
+    .vote-count {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #fbbf24;
+    }
+
+    .vote-count i {
+        font-size: 1.5rem;
+    }
+
+    /* Vote Button */
+    .btn-vote {
+        background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+        color: white;
+        border: none;
+        padding: 10px 24px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.9rem;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 6px 12px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
+        gap: 8px;
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
     }
 
-    .date-text i {
-        font-size: 1rem;
-        color: #60a5fa;
+    .btn-vote:hover {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
     }
 
-    /* Status Badge */
-    .status-badge {
-        font-size: 0.85rem;
+    .btn-vote i {
+        font-size: 1.1rem;
+    }
+
+    /* Badge Voted */
+    .badge-voted {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.7);
         padding: 10px 20px;
         border-radius: 25px;
         font-weight: 600;
+        font-size: 0.85rem;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        white-space: nowrap;
-    }
-
-    .status-proses { 
-        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-        color: #78350f;
-    }
-
-    .status-selesai { 
-        background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-        color: #064e3b;
-    }
-
-    .status-ditolak { 
-        background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
-        color: white;
-    }
-
-    /* Feedback Box */
-    .feedback-box {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%);
-        border: 1px solid rgba(59, 130, 246, 0.3);
-        border-left: 4px solid #3b82f6;
-        border-radius: 12px;
-        padding: 18px 20px;
-        margin-bottom: 20px;
-        animation: fadeIn 0.3s ease;
-    }
-
-    .feedback-label {
-        display: flex;
-        align-items: center;
         gap: 8px;
-        color: #60a5fa;
-        font-weight: 700;
-        font-size: 0.9rem;
-        margin-bottom: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .feedback-label i {
-        font-size: 1.2rem;
-    }
-
-    .feedback-text {
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 0.95rem;
-        line-height: 1.7;
-        margin: 0;
-        padding-left: 4px;
-    }
-
-    .divider {
-        height: 1px;
-        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
-        margin: 20px 0;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .badge-voted i {
+        font-size: 1rem;
     }
 
     /* Empty State */
@@ -207,89 +183,101 @@
             font-size: 1.1rem;
         }
 
-        .status-badge {
-            align-self: flex-start;
-        }
-
         .desc-text {
             padding: 12px;
         }
 
-        .feedback-box {
-            padding: 14px 16px;
+        .vote-section {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .btn-vote,
+        .badge-voted {
+            width: 100%;
+            justify-content: center;
         }
     }
 </style>
 
 <div class="container py-5">
 
-    <h2 class="page-title">Riwayat Laporan</h2>
+    <h2 class="page-title">
+        <i class="bi bi-fire"></i>
+        Trending Laporan
+    </h2>
 
-    @forelse($reports as $report)
+    @forelse($reports as $item)
         <div class="card-custom">
             
-            <!-- Header: Kategori + Status -->
+            <!-- Header: Kategori -->
             <div class="card-header-custom">
                 <h5 class="kategori-title">
                     <i class="bi bi-tag-fill"></i>
-                    {{ $report->kategori }}
+                    {{ $item->kategori }}
                 </h5>
-
-                @if($report->status === 'Diproses')
-                    <span class="status-badge status-proses">
-                        <i class="bi bi-hourglass-split"></i>
-                        Sedang Diproses
-                    </span>
-
-                @elseif($report->status === 'Selesai')
-                    <span class="status-badge status-selesai">
-                        <i class="bi bi-check-circle-fill"></i>
-                        Selesai
-                    </span>
-
-                @elseif($report->status === 'Ditolak')
-                    <span class="status-badge status-ditolak">
-                        <i class="bi bi-x-circle-fill"></i>
-                        Ditolak
-                    </span>
-                @endif
             </div>
 
             <!-- Isi Laporan -->
             <div class="desc-text">
-                {{ $report->isi_laporan }}
+                {{ Str::limit($item->isi_laporan, 200) }}
             </div>
 
-            <!-- Feedback dari Admin (hanya muncul jika ada) -->
-            @if(!empty($report->feedback))
-                <div class="feedback-box">
-                    <div class="feedback-label">
-                        <i class="bi bi-chat-left-text-fill"></i>
-                        <span>Feedback Admin</span>
-                    </div>
-                    <p class="feedback-text">{{ $report->feedback }}</p>
+            <!-- Vote Section -->
+            <div class="vote-section">
+                <div class="vote-count">
+                    <i class="bi bi-fire"></i>
+                    <span>{{ $item->hasil_vote }} Vote</span>
                 </div>
-            @endif
 
-            <!-- Divider -->
-            <div class="divider"></div>
-
-            <!-- Tanggal -->
-            <span class="date-text">
-                <i class="bi bi-calendar-check"></i>
-                Dikirim: {{ $report->created_at->format('d M Y, H:i') }}
-            </span>
+                @if(!auth()->user()->telah_voting)
+                    <form id="vote-form-{{ $item->id }}" action="{{ route('trending.vote', $item->id) }}" method="POST">
+                        @csrf
+                        <button type="button" class="btn-vote" onclick="confirmVote({{ $item->id }}, '{{ addslashes($item->kategori) }}')">
+                            <i class="bi bi-hand-thumbs-up-fill"></i>
+                            Vote Sekarang
+                        </button>
+                    </form>
+                @else
+                    <span class="badge-voted">
+                        <i class="bi bi-check-circle-fill"></i>
+                        Sudah Vote
+                    </span>
+                @endif
+            </div>
 
         </div>
 
     @empty
         <div class="empty-state">
             <i class="bi bi-inbox"></i>
-            <p>Belum ada laporan yang pernah kamu kirim.</p>
+            <p>Belum ada laporan trending saat ini.</p>
         </div>
     @endforelse
 
 </div>
+
+<script>
+function confirmVote(reportId, kategori) {
+    Swal.fire({
+        title: 'Konfirmasi Vote',
+        html: `Apakah kamu yakin ingin vote laporan kategori <strong>${kategori}</strong>?<br><br><small>Vote hanya bisa dilakukan sekali!</small>`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '<i class="bi bi-hand-thumbs-up-fill"></i> Ya, Vote!',
+        cancelButtonText: '<i class="bi bi-x-circle"></i> Batal',
+        reverseButtons: true,
+        confirmButtonColor: '#10b981',
+        cancelButtonColor: '#6b7280'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Submit form
+            document.getElementById('vote-form-' + reportId).submit();
+        }
+    });
+}
+</script>
 
 @if(session('success'))
 <script>
