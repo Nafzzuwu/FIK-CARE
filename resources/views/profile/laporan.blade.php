@@ -172,7 +172,7 @@
             <p>Pastikan informasi yang Anda berikan akurat dan lengkap agar laporan dapat ditindaklanjuti dengan baik.</p>
         </div>
 
-        <form action="{{ route('report.store') }}" method="POST">
+        <form id="report-form" action="{{ route('report.store') }}" method="POST">
             @csrf
 
             <!-- Nama Pelapor -->
@@ -188,7 +188,7 @@
                 <label class="form-label">
                     <i class="bi bi-tags"></i> Kategori Masalah
                 </label>
-                <select name="kategori" class="form-select" required>
+                <select name="kategori" id="kategori" class="form-select" required>
                     <option value="">-- Pilih Kategori --</option>
                     <option value="Fasilitas">Fasilitas</option>
                     <option value="Layanan">Layanan</option>
@@ -203,7 +203,7 @@
                 <label class="form-label">
                     <i class="bi bi-file-text"></i> Isi Laporan
                 </label>
-                <textarea name="isi_laporan" class="form-control" rows="6" placeholder="Tuliskan detail laporan Anda secara lengkap dan jelas..." required></textarea>
+                <textarea name="isi_laporan" id="isi_laporan" class="form-control" rows="6" placeholder="Tuliskan detail laporan Anda secara lengkap dan jelas..." required></textarea>
                 <small class="text-muted d-block mt-2" style="color: rgba(255,255,255,0.5) !important;">
                     Minimal 20 karakter
                 </small>
@@ -212,14 +212,14 @@
             <!-- Tanggal Lapor -->
             <div class="mb-4">
                 <label class="form-label">
-                    <i class="bi bi-calendar-event"></i> Tanggal Kejadian
+                    <i class="bi bi-calendar-event"></i> Tanggal Pengiriman
                 </label>
-                <input type="date" name="tanggal" class="form-control" required max="{{ date('Y-m-d') }}">
+                <input type="date" name="tanggal" id="tanggal" class="form-control" required max="{{ date('Y-m-d') }}">
             </div>
 
             <!-- Submit -->
             <div class="text-end mt-4">
-                <button type="submit" class="btn btn-submit">
+                <button type="button" class="btn btn-submit" onclick="confirmSubmit()">
                     <i class="bi bi-send-fill"></i>
                     Kirim Laporan
                 </button>
@@ -230,5 +230,116 @@
     </div>
 
 </div>
+
+<script>
+function confirmSubmit() {
+    // Validasi form
+    const kategori = document.getElementById('kategori').value;
+    const isiLaporan = document.getElementById('isi_laporan').value;
+    const tanggal = document.getElementById('tanggal').value;
+
+    if (!kategori) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian!',
+            text: 'Silakan pilih kategori masalah terlebih dahulu.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f59e0b'
+        });
+        return;
+    }
+
+    if (!isiLaporan || isiLaporan.length < 20) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian!',
+            text: 'Isi laporan minimal 20 karakter.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f59e0b'
+        });
+        return;
+    }
+
+    if (!tanggal) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian!',
+            text: 'Silakan pilih tanggal pengiriman terlebih dahulu.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f59e0b'
+        });
+        return;
+    }
+
+    // Konfirmasi submit
+    Swal.fire({
+        title: 'Konfirmasi Kirim Laporan',
+        html: `
+            <div style="text-align: left; padding: 10px;">
+                <p><strong>Kategori:</strong> ${kategori}</p>
+                <p><strong>Tanggal Pengiriman:</strong> ${tanggal}</p>
+                <p style="margin-top: 15px;">Apakah Anda yakin ingin mengirim laporan ini?</p>
+            </div>
+        `,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '<i class="bi bi-send-fill"></i> Ya, Kirim!',
+        cancelButtonText: '<i class="bi bi-x-circle"></i> Batal',
+        reverseButtons: true,
+        confirmButtonColor: '#3b82f6',
+        cancelButtonColor: '#6b7280'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Submit form
+            document.getElementById('report-form').submit();
+        }
+    });
+}
+</script>
+
+@if(session('success'))
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Berhasil!',
+    text: '{{ session("success") }}',
+    timer: 3000,
+    timerProgressBar: true,
+    showConfirmButton: true,
+    confirmButtonText: 'OK',
+    confirmButtonColor: '#10b981'
+}).then(() => {
+    // Redirect ke halaman riwayat laporan setelah sukses
+    window.location.href = "{{ route('report.index') }}";
+});
+</script>
+@endif
+
+@if(session('error'))
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Gagal!',
+    text: '{{ session("error") }}',
+    timer: 3000,
+    timerProgressBar: true,
+    showConfirmButton: true,
+    confirmButtonText: 'OK',
+    confirmButtonColor: '#ef4444'
+});
+</script>
+@endif
+
+@if($errors->any())
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Terjadi Kesalahan!',
+    html: '<ul style="text-align: left;">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+    confirmButtonText: 'OK',
+    confirmButtonColor: '#ef4444'
+});
+</script>
+@endif
 
 @endsection

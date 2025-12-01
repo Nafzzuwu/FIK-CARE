@@ -41,6 +41,8 @@ body {
     margin-bottom: 0;
     border-collapse: separate;
     border-spacing: 0 8px;
+    width: 100%;
+    table-layout: fixed;
 }
 
 .table-dark-custom thead th {
@@ -54,6 +56,23 @@ body {
     border: none;
     white-space: nowrap;
 }
+
+/* Atur lebar kolom yang konsisten */
+.table-dark-custom thead th:nth-child(1) { width: 5%; } /* ID */
+.table-dark-custom thead th:nth-child(2) { width: 15%; } /* Pelapor */
+.table-dark-custom thead th:nth-child(3) { width: 12%; } /* Kategori */
+.table-dark-custom thead th:nth-child(4) { width: 28%; } /* Isi Laporan */
+.table-dark-custom thead th:nth-child(5) { width: 12%; } /* Tanggal */
+.table-dark-custom thead th:nth-child(6) { width: 12%; } /* Status */
+.table-dark-custom thead th:nth-child(7) { width: 16%; text-align: center; } /* Aksi */
+
+.table-dark-custom tbody td:nth-child(1) { width: 5%; }
+.table-dark-custom tbody td:nth-child(2) { width: 15%; }
+.table-dark-custom tbody td:nth-child(3) { width: 12%; }
+.table-dark-custom tbody td:nth-child(4) { width: 28%; }
+.table-dark-custom tbody td:nth-child(5) { width: 12%; }
+.table-dark-custom tbody td:nth-child(6) { width: 12%; }
+.table-dark-custom tbody td:nth-child(7) { width: 16%; text-align: center; }
 
 .table-dark-custom thead th:first-child {
     border-radius: 12px 0 0 12px;
@@ -175,6 +194,23 @@ body {
     background-color: #ffffff !important;
 }
 
+.btn-detail {
+    background: rgba(59,130,246,.2);
+    color: #60a5fa;
+    border: 1px solid rgba(59,130,246,.3);
+    border-radius: 10px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.btn-detail:hover {
+    background: rgba(59,130,246,.35);
+    transform: scale(1.05);
+}
+
+
 /* Delete Button */
 .btn-delete {
     background: rgba(239, 68, 68, 0.15);
@@ -189,6 +225,7 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 1.1rem;
+    margin-left: 0;
 }
 
 .btn-delete:hover {
@@ -251,7 +288,9 @@ body {
                     <th>Isi Laporan</th>
                     <th>Tanggal</th>
                     <th>Status</th>
-                    <th class="text-center">Aksi</th>
+                    <th class="text-center">
+                        Aksi
+                    </th>
                 </tr>
             </thead>
 
@@ -288,21 +327,36 @@ body {
 
                     <!-- STATUS -->
                     <td>
-                        <form action="{{ route('admin.daftarlaporan.status', $item->id) }}" method="POST">
+                        <form id="status-form-{{ $item->id }}" action="{{ route('admin.daftarlaporan.status', $item->id) }}" method="POST">
                             @csrf
                             @method('PUT')
 
-                            <select name="status" onchange="this.form.submit()"
-                                class="select-status status-{{ $item->status }}">
+                            <select name="status" onchange="confirmStatusChange(this, {{ $item->id }})"
+                                class="select-status status-{{ $item->status }}"
+                                data-current-status="{{ $item->status }}">
                                 <option value="Diproses" {{ $item->status == 'Diproses' ? 'selected' : '' }}>Diproses</option>
                                 <option value="Selesai"  {{ $item->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
                                 <option value="Ditolak"  {{ $item->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
                             </select>
                         </form>
                     </td>
+                    
+                    <td class="text-center">
+
+                    <!-- DETAIL BUTTON -->
+                    <button class="btn-detail"
+                        onclick="openDetail(
+                            '{{ $item->nama_pelapor }}',
+                            '{{ $item->kategori }}',
+                            '{{ $item->tanggal }}',
+                            `{{ $item->isi_laporan }}`,
+                            '{{ $item->id }}',
+                            `{{ $item->feedback ?? '' }}`
+                        )">
+                        Detail
+                    </button>
 
                     <!-- DELETE -->
-                    <td class="text-center">
                         <span onclick="confirmDelete({{ $item->id }})" class="btn-delete">
                             <i class="bi bi-trash"></i>
                         </span>
@@ -333,8 +387,53 @@ body {
 
 </div>
 
-
 <script>
+// Konfirmasi perubahan status
+function confirmStatusChange(selectElement, id) {
+    const newStatus = selectElement.value;
+    const currentStatus = selectElement.getAttribute('data-current-status');
+    
+    // Jika tidak ada perubahan, tidak perlu konfirmasi
+    if (newStatus === currentStatus) {
+        return;
+    }
+
+    // Icon dan pesan sesuai status
+    let icon = 'question';
+    let title = 'Ubah Status Laporan?';
+    let text = '';
+    
+    if (newStatus === 'Diproses') {
+        icon = 'info';
+        text = 'Status akan diubah menjadi Sedang Diproses';
+    } else if (newStatus === 'Selesai') {
+        icon = 'success';
+        text = 'Status akan diubah menjadi Selesai';
+    } else if (newStatus === 'Ditolak') {
+        icon = 'warning';
+        text = 'Status akan diubah menjadi Ditolak';
+    }
+
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        showCancelButton: true,
+        confirmButtonColor: "#22c55e",
+        cancelButtonColor: "#6b7280",
+        confirmButtonText: "Ya, ubah status!",
+        cancelButtonText: "Batal"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Submit form
+            document.getElementById('status-form-' + id).submit();
+        } else {
+            // Kembalikan ke status semula
+            selectElement.value = currentStatus;
+        }
+    });
+}
+
 function confirmDelete(id) {
     Swal.fire({
         title: "Hapus laporan?",
@@ -344,12 +443,7 @@ function confirmDelete(id) {
         confirmButtonColor: "#ef4444",
         cancelButtonColor: "#6b7280",
         confirmButtonText: "Ya, hapus!",
-        cancelButtonText: "Batal",
-        background: '#1e293b',
-        color: '#fff',
-        customClass: {
-            popup: 'swal-dark'
-        }
+        cancelButtonText: "Batal"
     }).then((result) => {
         if (result.isConfirmed) {
             document.getElementById("delete-form-" + id).submit();
@@ -365,21 +459,63 @@ function confirmDelete(id) {
 </style>
 
 <script>
-function confirmDelete(id) {
+function openDetail(nama, kategori, tanggal, isi, id, feedback) {
     Swal.fire({
-        title: "Hapus laporan?",
-        text: "Data tidak dapat dikembalikan!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Ya, hapus"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById("delete-form-" + id).submit();
-        }
+        title: "Detail Laporan",
+        html: `
+            <div style="text-align:left;">
+                <b>Pelapor:</b> ${nama}<br>
+                <b>Kategori:</b> ${kategori}<br>
+                <b>Tanggal:</b> ${tanggal}<br><br>
+
+                <b>Isi Laporan:</b><br>
+                <div style="background:#0f172a; padding:12px; border-radius:10px; margin-top:5px;">
+                    ${isi}
+                </div>
+
+                <br>
+                <b>Feedback Admin:</b>
+                <form method="POST" action="/admin/daftarlaporan/${id}/feedback">
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <textarea name="feedback" class="swal-input" placeholder="Tulis feedback..."
+                        style="width:100%;padding:8px;border-radius:8px;margin-top:6px;"
+                    >${feedback}</textarea>
+                    <br><br>
+                    <button type="submit" 
+                        style="background:#22c55e;padding:8px 14px;border:none;border-radius:10px;color:white;font-weight:600;">
+                        Simpan Feedback
+                    </button>
+                </form>
+            </div>
+        `,
+        showConfirmButton: false,
+        background: '#1e293b',
+        color: '#fff'
     });
 }
 </script>
+
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: "{{ session('success') }}",
+        timer: 2500,
+        showConfirmButton: false
+    });
+</script>
+@endif
+
+@if($errors->any())
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: "{{ $errors->first() }}"
+    });
+</script>
+@endif
 
 @endsection

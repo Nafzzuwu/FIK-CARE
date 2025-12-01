@@ -92,7 +92,28 @@
     }
 
     /* Responsive */
-    @media (max-width: 768px) {
+    @media (max-width: 1200px) {
+        .feature-card {
+            height: 260px;
+            padding: 30px 20px;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            font-size: 2rem;
+        }
+
+        .feature-title {
+            font-size: 1.15rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 992px) {
         .dashboard-header {
             padding: 30px 20px;
         }
@@ -105,6 +126,12 @@
             height: auto;
             min-height: 250px;
             margin-bottom: 20px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .feature-card {
+            min-height: 230px;
         }
     }
 </style>
@@ -120,7 +147,7 @@
     <!-- MENU -->
     <div class="row g-4">
 
-        <div class="col-lg-4 col-md-6">
+        <div class="col-xl-3 col-lg-6 col-md-6">
             <a href="{{ route('report.create') }}" class="text-decoration-none">
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -132,7 +159,7 @@
             </a>
         </div>
 
-        <div class="col-lg-4 col-md-6">
+        <div class="col-xl-3 col-lg-6 col-md-6">
             <a href="{{ route('report.index') }}" class="text-decoration-none">
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -144,7 +171,7 @@
             </a>
         </div>
 
-        <div class="col-lg-4 col-md-6">
+        <div class="col-xl-3 col-lg-6 col-md-6">
             <a href="/profile" class="text-decoration-none">
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -152,6 +179,18 @@
                     </div>
                     <div class="feature-title">Profil Saya</div>
                     <p>Kelola pengaturan akun Anda.</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <a href="{{ route('trending.index') }}" class="text-decoration-none">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-fire"></i>
+                    </div>
+                    <div class="feature-title">Trending Laporan</div>
+                    <p>Lihat laporan paling banyak divote.</p>
                 </div>
             </a>
         </div>

@@ -12,7 +12,9 @@ class Report extends Model
         'kategori',
         'isi_laporan',
         'tanggal',
-        'status'
+        'status',
+        'feedback',
+        'telah_voting'
     ];
 
 
